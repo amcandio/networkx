@@ -13,6 +13,7 @@ class AlgorithmBenchmarks:
         nx.erdos_renyi_graph(nodes, 0.5),
         nx.erdos_renyi_graph(nodes, 0.9),
         fetch_drug_interaction_network(),
+        nx.random_labeled_tree(nodes)
     ]
     params = [
         "Erdos Renyi (100, 0.1)",
@@ -25,6 +26,14 @@ class AlgorithmBenchmarks:
 
     def setup(self, graph):
         self.graphs_dict = dict(zip(self.params, self._graphs))
+
+    def time_single_source_dijkstra(self, graph):
+        # timing this should also give us information about
+        # underlying shortest path methods
+        G = self.graphs_dict[graph]
+        for source in G:
+            for target in G:
+                _ = nx.single_source_dijkstra(G, source, target)
 
     def time_betweenness_centrality(self, graph):
         # timing this should also give us information about
